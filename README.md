@@ -1,8 +1,9 @@
 # Orb Swapper Puzzle Game
 
-The game consists of 10 rows and 10 columns of orbs of different styles.
+The game consists of 10 rows and 10 columns of orbs of different styles: purple '+', blue '-', and orange 'o'.
 Orbs can be swapped in fixed patterns, shown by the lines connecting the different orbs.
-Orbs are swapped by either clicking on two connected orbs, or by clicking and dragging and orb across a set of orbs.
+A purple orb can swap with an orange orb in the adjacent column below it, an orange orb can swap with a blue orb below it, and a blue with a purple orb below it.
+Orbs are swapped by either clicking on two connected orbs, or by dragging an orb across a set of orbs.
 
 Every 10 seconds  (indicated by a rising bar on the right) or if the user presses Space Bar, the right-most column of orbs is removed from the game and counted, with a new column coming in from the left.
 Purple orbs with a '+' add one to the count, while blue orbs with '-' remove one from the count. Orange orbs are neutral and do not effect the count.
