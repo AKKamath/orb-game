@@ -310,7 +310,7 @@ func _on_timer_timeout() -> void:
 		print(color, (1 - score / ROWS), (score / ROWS))
 		$ScoreBar.modulate = color
 	elif burnedCount > 0:
-		$ScoreIndicator.text = "Burned!"
+		$ScoreIndicator.text = "Waste!"
 		$ScoreIndicator.reset()
 		$ScoreIndicator.show()
 	steps += 1
@@ -332,13 +332,15 @@ func _on_timer_timeout() -> void:
 func _on_burn_bar_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("click"):
-			_on_timer_timeout()
+			if $BurnBar.value > 1:
+				_on_timer_timeout()
 	pass # Replace with function body.
 
 # Emulate timer timeout on user indication
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("fire"):
-		_on_timer_timeout()
+			if $BurnBar.value > 1:
+				_on_timer_timeout()
 
 func _on_button_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
