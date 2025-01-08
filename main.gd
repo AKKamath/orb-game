@@ -267,7 +267,7 @@ func _on_timer_timeout() -> void:
 		var index = Vector2i(0, row)
 		roundScore += orbDict[index].type - 1
 		orbDict[index].dest.x = orbDict[index].position.x
-		orbDict[index].SPEED = 1000
+		orbDict[index].SPEED = 2000
 		orbDict[index].disconnect_all()
 	
 	# Move final column based on score

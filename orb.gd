@@ -7,6 +7,9 @@ signal clicked(index, selected, dragged)
 @export var SPEED : int = 200
 @export var burned : bool = false
 
+const BASE_SPEED = 300
+const SWAP_SPEED = 1000
+
 var TYPE_COLOR = {
 	0 : Color.CADET_BLUE,
 	1 : Color.CHOCOLATE,
@@ -17,13 +20,30 @@ var dest
 var highlighted = false
 var connectedOrbs = {}
 
+var connectedLines = {}
+
 func connect_orb(orb):
 	#print("Connected ", index, " to ", orb.index)
 	connectedOrbs[orb] = orb
+	if(orb.type != type and dest.x > orb.dest.x):
+		if(can_swap(orb)):
+			var line = Line2D.new()
+			line.hide()
+			line.add_point(Vector2.ZERO)
+			line.add_point(orb.dest - dest)
+			line.set_default_color(Color.BISQUE)
+			line.set_width(5)
+			line.z_index = -2
+			line.set_light_mask(9)
+			add_child(line)
+			connectedLines[orb] = line
 	queue_redraw()
 	
 func disconnect_orb(orb) -> void:
 	print(orb.index)
+	if orb in connectedLines:
+		connectedLines[orb].queue_free()
+		connectedLines.erase(orb)
 	if orb in connectedOrbs:
 		#print(index, "Disconnected", orb.index)
 		connectedOrbs.erase(orb)
@@ -31,6 +51,9 @@ func disconnect_orb(orb) -> void:
 	pass # Replace with function body.
 
 func disconnect_all():
+	for orb in connectedLines:
+		connectedLines[orb].queue_free()
+	connectedLines.clear()
 	connectedOrbs.clear()
 	queue_redraw()
 
@@ -40,7 +63,23 @@ func _ready() -> void:
 	if dest == null:
 		dest = position
 	highlighted = false
-	SPEED = get_viewport().size.x * 0.2
+	SPEED = BASE_SPEED#get_viewport().size.x * 0.2
+	
+	# Init sizes
+	$CollisionShape2D.shape.radius = radius
+	$MeshInstance2D.scale.x = radius * 2 * 0.8
+	$MeshInstance2D.scale.y = radius * 2 * 0.8
+	$PointLight2D.scale.x = radius * 2 * 0.8 / 64
+	$PointLight2D.scale.y = radius * 2 * 0.8 / 64
+	$PointLight2D2.scale.x = radius * 2 * 0.8 / 64
+	$PointLight2D2.scale.y = radius * 2 * 0.8 / 64
+	
+	'''
+	if burned:
+		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(0.6))
+	else:
+		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type])
+	'''
 	pass # Replace with function body.
 	
 func can_swap(orb):
@@ -54,29 +93,33 @@ func _draw() -> void:
 	if(position == dest):
 		for orb in connectedOrbs:
 			if(orb.type != type and dest.x > orb.dest.x):
-				if(can_swap(orb) and orb.dest.y < dest.y):
-					draw_line(Vector2.ZERO, orb.dest - dest, Color.BISQUE, 5)
-				elif(can_swap(orb) and orb.dest.y > dest.y):
-					draw_line(Vector2.ZERO, orb.dest - dest, Color.BISQUE, 5)
+				if(can_swap(orb)):
+					connectedLines[orb].show()
+					pass
+					#draw_line(Vector2.ZERO, orb.dest - dest, Color.BISQUE, 5)
+				#elif(can_swap(orb) and ):
+				#	draw_line(Vector2.ZERO, orb.dest - dest, Color.BISQUE, 5)
+	
 	if highlighted:
-		draw_circle(Vector2.ZERO, radius, TYPE_COLOR[type].darkened(-0.7))
+		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(-0.7), false, radius * 0.1)
 	else:
-		draw_circle(Vector2.ZERO, radius * 0.8 + 2, Color.BLACK)
+		draw_circle(Vector2.ZERO, radius * 0.8 + 2, Color.BLACK, false, 2)
+
 	if burned:
-		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(0.6))
+		$MeshInstance2D.texture.gradient.set_color(0, TYPE_COLOR[type].darkened(0.6))
+		#draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(0.6))
 	else:
-		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type])
+		$MeshInstance2D.texture.gradient.set_color(0, TYPE_COLOR[type])
+		#draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type])
+
 	# Draw +
 	if(type == 2 and !burned):
 		draw_line(Vector2.ZERO - subValX, Vector2.ZERO + subValX, Color.WHITE, 5)
 		draw_line(Vector2.ZERO - subValY, Vector2.ZERO + subValY, Color.WHITE, 5)
 	elif type == 1:
-		draw_circle(Vector2.ZERO, radius * 0.4, Color.WHITE)
-		draw_circle(Vector2.ZERO, radius * 0.35, TYPE_COLOR[type])
+		draw_circle(Vector2.ZERO, radius * 0.4, Color.WHITE, false, radius * 0.05)
 	elif type == 0 or burned:
 		draw_line(Vector2.ZERO - subValX, Vector2.ZERO + subValX, Color.WHITE, 5)
-		
-	$CollisionShape2D.shape.radius = radius
 
 func swap(node):
 	#Swap node positions
@@ -96,6 +139,9 @@ func swap(node):
 	node.highlighted = false
 	node.disconnect_all()
 	node.queue_redraw()
+	
+	node.SPEED = SWAP_SPEED
+	SPEED = SWAP_SPEED
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -103,6 +149,7 @@ func _process(delta: float) -> void:
 		if(abs(position.distance_to(dest)) < abs(SPEED * delta)):
 			position = dest
 			queue_redraw()
+			SPEED = BASE_SPEED
 		else:
 			position += position.direction_to(dest) * SPEED * delta
 	pass
