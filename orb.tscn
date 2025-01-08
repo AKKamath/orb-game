@@ -5,6 +5,19 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4aft"]
 radius = 15.0
 
+[sub_resource type="SphereMesh" id="SphereMesh_bl1t7"]
+
+[sub_resource type="Gradient" id="Gradient_pv2ln"]
+resource_local_to_scene = true
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 0.427451, 0.686275)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wxqe8"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_pv2ln")
+fill = 1
+fill_from = Vector2(0.915138, 0.0733945)
+
 [sub_resource type="Gradient" id="Gradient_3tnbf"]
 offsets = PackedFloat32Array(0.522727, 1)
 colors = PackedColorArray(0.999998, 0.99936, 0.722214, 1, 0.12549, 0.12549, 0.12549, 0)
@@ -24,19 +37,6 @@ gradient = SubResource("Gradient_pro67")
 fill = 1
 fill_from = Vector2(0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_bl1t7"]
-
-[sub_resource type="Gradient" id="Gradient_pv2ln"]
-resource_local_to_scene = true
-offsets = PackedFloat32Array(1)
-colors = PackedColorArray(1, 1, 0.427451, 0.686275)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_wxqe8"]
-resource_local_to_scene = true
-gradient = SubResource("Gradient_pv2ln")
-fill = 1
-fill_from = Vector2(0.915138, 0.0733945)
-
 [node name="orb" type="Area2D"]
 position = Vector2(252, 134)
 script = ExtResource("1_68io8")
@@ -47,21 +47,23 @@ shape = SubResource("CircleShape2D_x4aft")
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
-range_item_cull_mask = 256
-texture = SubResource("GradientTexture2D_7thgw")
-
-[node name="PointLight2D2" type="PointLight2D" parent="."]
-blend_mode = 1
-range_item_cull_mask = 256
-texture = SubResource("GradientTexture2D_yhwu5")
-
 [node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 light_mask = 257
 z_index = -1
 scale = Vector2(64, 64)
 mesh = SubResource("SphereMesh_bl1t7")
 texture = SubResource("GradientTexture2D_wxqe8")
+
+[node name="PointLight2D" type="PointLight2D" parent="MeshInstance2D"]
+scale = Vector2(0.015625, 0.015625)
+range_item_cull_mask = 256
+texture = SubResource("GradientTexture2D_7thgw")
+
+[node name="PointLight2D2" type="PointLight2D" parent="MeshInstance2D"]
+scale = Vector2(0.015625, 0.015625)
+blend_mode = 1
+range_item_cull_mask = 256
+texture = SubResource("GradientTexture2D_yhwu5")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

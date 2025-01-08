@@ -31,8 +31,8 @@ func connect_orb(orb):
 			line.hide()
 			line.add_point(Vector2.ZERO)
 			line.add_point(orb.dest - dest)
-			line.set_default_color(Color.BISQUE)
-			line.set_width(5)
+			line.set_default_color(Color.GREEN_YELLOW)
+			line.set_width(10)
 			line.z_index = -2
 			line.set_light_mask(9)
 			add_child(line)
@@ -69,10 +69,6 @@ func _ready() -> void:
 	$CollisionShape2D.shape.radius = radius
 	$MeshInstance2D.scale.x = radius * 2 * 0.8
 	$MeshInstance2D.scale.y = radius * 2 * 0.8
-	$PointLight2D.scale.x = radius * 2 * 0.8 / 64
-	$PointLight2D.scale.y = radius * 2 * 0.8 / 64
-	$PointLight2D2.scale.x = radius * 2 * 0.8 / 64
-	$PointLight2D2.scale.y = radius * 2 * 0.8 / 64
 	
 	'''
 	if burned:
@@ -103,7 +99,7 @@ func _draw() -> void:
 	if highlighted:
 		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(-0.7), false, radius * 0.1)
 	else:
-		draw_circle(Vector2.ZERO, radius * 0.8 + 2, Color.BLACK, false, 2)
+		draw_circle(Vector2.ZERO, radius * 0.8, Color.BLACK, false, 3)
 
 	if burned:
 		$MeshInstance2D.texture.gradient.set_color(0, TYPE_COLOR[type].darkened(0.6))
