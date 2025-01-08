@@ -9,5 +9,4 @@ Purple orbs with a '+' add one to the count, while blue orbs with '-' remove one
 If the count is negative the column moves downward and is ignored. If the count is positive, the column moves upward count is added to the running score.
 
 After 10 rounds, the game ends and the final score is shown.
-
-<img width="1440" alt="image" src="https://github.com/user-attachments/assets/ffda3e49-3fb7-4213-944a-6eb1319464b6" />
+<img width="1438" alt="Screenshot 2025-01-08 at 8 01 30 PM" src="https://github.com/user-attachments/assets/9b34deb4-65d4-40f0-bf42-40edcc428948" />
