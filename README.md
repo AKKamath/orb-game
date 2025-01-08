@@ -1,4 +1,4 @@
-Project in Godot that implements an orb-swapping puzzle game. 
+# Orb Swapper Puzzle Game
 
 The game consists of 10 rows and 10 columns of orbs of different styles.
 Orbs can be swapped in fixed patterns, shown by the lines connecting the different orbs.
@@ -10,3 +10,6 @@ If the count is negative the column moves downward and is ignored. If the count 
 
 After 10 rounds, the game ends and the final score is shown.
 <img width="1438" alt="Screenshot 2025-01-08 at 8 01 30 PM" src="https://github.com/user-attachments/assets/9b34deb4-65d4-40f0-bf42-40edcc428948" />
+
+
+Written using [Godot v4.3](https://godotengine.org/), the open-source game engine.
