@@ -162,7 +162,7 @@ func orb_clicked(dragged : bool = false):
 		clicked.emit(index, false, dragged)
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
 		if event.is_action_pressed("click"):
 			orb_clicked(false)
 	pass # Replace with function body.

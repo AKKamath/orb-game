@@ -1,7 +1,7 @@
 extends Node
 @export var orbObj : PackedScene
 
-const ROWS = 10
+const ROWS = 8
 const COLS = 10
 
 var BURN_TIME = 10
@@ -330,7 +330,7 @@ func _on_timer_timeout() -> void:
 	pass # Replace with function body.
 
 func _on_burn_bar_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
 		if event.is_action_pressed("click"):
 			if $BurnBar.value > 1:
 				_on_timer_timeout()
@@ -343,7 +343,7 @@ func _input(event: InputEvent) -> void:
 				_on_timer_timeout()
 
 func _on_button_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
 		if event.is_action_pressed("click"):
 			if game_running:
 				game_end()
