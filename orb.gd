@@ -70,13 +70,11 @@ func _ready() -> void:
 	$MeshInstance2D.scale.x = radius * 2 * 0.8
 	$MeshInstance2D.scale.y = radius * 2 * 0.8
 	
-	'''
-	if burned:
-		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(0.6))
-	else:
-		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type])
-	'''
-	pass # Replace with function body.
+func redraw():
+	$CollisionShape2D.shape.radius = radius
+	$MeshInstance2D.scale.x = radius * 2 * 0.8
+	$MeshInstance2D.scale.y = radius * 2 * 0.8
+	_draw()
 	
 func can_swap(orb):
 	return ((orb.type - type == 1 || orb.type - type == -2) and orb.dest.y < dest.y) or \
@@ -110,12 +108,12 @@ func _draw() -> void:
 
 	# Draw +
 	if(type == 2 and !burned):
-		draw_line(Vector2.ZERO - subValX, Vector2.ZERO + subValX, Color.WHITE, 5)
-		draw_line(Vector2.ZERO - subValY, Vector2.ZERO + subValY, Color.WHITE, 5)
+		draw_line(Vector2.ZERO - subValX, Vector2.ZERO + subValX, Color.ALICE_BLUE, 5)
+		draw_line(Vector2.ZERO - subValY, Vector2.ZERO + subValY, Color.ALICE_BLUE, 5)
 	elif type == 1:
-		draw_circle(Vector2.ZERO, radius * 0.4, Color.WHITE, false, radius * 0.05)
+		draw_circle(Vector2.ZERO, radius * 0.4, Color.ALICE_BLUE, false, 5)
 	elif type == 0 or burned:
-		draw_line(Vector2.ZERO - subValX, Vector2.ZERO + subValX, Color.WHITE, 5)
+		draw_line(Vector2.ZERO - subValX, Vector2.ZERO + subValX, Color.ALICE_BLUE, 5)
 
 func swap(node):
 	#Swap node positions
@@ -164,12 +162,14 @@ func orb_clicked(dragged : bool = false):
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton or event is InputEventScreenTouch:
 		if event.is_action_pressed("click"):
+			print(event)
 			orb_clicked(false)
 	pass # Replace with function body.
 
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
-	queue_free()
+	if dest.y == 10000 or dest.y == -10000:
+		queue_free()
 	pass # Replace with function body.
 
 

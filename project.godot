@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="Orb swapper"
-run/main_scene="res://main.tscn"
+run/main_scene="res://title.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
+boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
 [display]

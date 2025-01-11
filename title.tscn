@@ -1,0 +1,205 @@
+[gd_scene load_steps=7 format=3 uid="uid://b150k27mk383v"]
+
+[ext_resource type="Script" path="res://title.gd" id="1_8su1p"]
+[ext_resource type="PackedScene" uid="uid://cefkthik5xabh" path="res://orb.tscn" id="2_j6j53"]
+[ext_resource type="ButtonGroup" uid="uid://duve4ich3ukkp" path="res://style_buttongroup.tres" id="3_2kblo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gjkm"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Theme" id="Theme_slhqg"]
+default_font_size = 45
+BoxContainer/constants/separation = 40
+Button/styles/pressed = SubResource("StyleBoxFlat_4gjkm")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_pvtb1"]
+
+[node name="TitleScreen" type="Node"]
+
+[node name="TitleUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_slhqg")
+script = ExtResource("1_8su1p")
+orbObj = ExtResource("2_j6j53")
+
+[node name="Title" type="Label" parent="TitleUI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -350.0
+offset_top = 148.0
+offset_right = -47.0
+offset_bottom = 224.0
+grow_horizontal = 2
+scale = Vector2(3, 3)
+theme_override_font_sizes/font_size = 55
+text = "rb Swapper"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="orb" parent="TitleUI/Title" instance=ExtResource("2_j6j53")]
+position = Vector2(-31.6667, 40)
+radius = 40
+type = 1
+
+[node name="StyleUI" type="VBoxContainer" parent="TitleUI"]
+layout_mode = 2
+offset_left = 4477.0
+offset_top = 2000.0
+offset_right = 4477.0
+offset_bottom = 2084.0
+alignment = 2
+
+[node name="StyleOpts" type="HBoxContainer" parent="TitleUI/StyleUI"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="TypeLabel" type="Label" parent="TitleUI/StyleUI/StyleOpts"]
+layout_mode = 2
+text = "Style:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndlessButton" type="Button" parent="TitleUI/StyleUI/StyleOpts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+toggle_mode = true
+button_group = ExtResource("3_2kblo")
+text = "Endless"
+
+[node name="ClassicButton" type="Button" parent="TitleUI/StyleUI/StyleOpts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+toggle_mode = true
+button_group = ExtResource("3_2kblo")
+text = "Classic"
+
+[node name="PerfectionistButton" type="Button" parent="TitleUI/StyleUI/StyleOpts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+toggle_mode = true
+button_group = ExtResource("3_2kblo")
+text = "Perfectionist"
+
+[node name="TypeDescription" type="Label" parent="TitleUI/StyleUI"]
+layout_mode = 2
+text = "Positive column must always be all positive orbs. Score is rounds survived."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DifficultyUI" type="VBoxContainer" parent="TitleUI"]
+layout_mode = 0
+offset_left = 3600.0
+offset_top = 2400.0
+offset_right = 3640.0
+offset_bottom = 2440.0
+
+[node name="DifficultyOpts" type="HBoxContainer" parent="TitleUI/DifficultyUI"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="DifficultyLabel" type="Label" parent="TitleUI/DifficultyUI/DifficultyOpts"]
+layout_mode = 2
+text = "Difficulty:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EasyButton" type="Button" parent="TitleUI/DifficultyUI/DifficultyOpts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+toggle_mode = true
+button_group = SubResource("ButtonGroup_pvtb1")
+text = "Easy"
+
+[node name="NormalButton" type="Button" parent="TitleUI/DifficultyUI/DifficultyOpts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+toggle_mode = true
+button_group = SubResource("ButtonGroup_pvtb1")
+text = "Normal"
+
+[node name="HardButton" type="Button" parent="TitleUI/DifficultyUI/DifficultyOpts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+toggle_mode = true
+button_group = SubResource("ButtonGroup_pvtb1")
+text = "Hard"
+
+[node name="DifficultyDescription" type="Label" parent="TitleUI/DifficultyUI"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InsPanel" type="Control" parent="TitleUI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="InsBox" type="ScrollContainer" parent="TitleUI"]
+layout_mode = 2
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="Instructions" type="Label" parent="TitleUI/InsBox"]
+layout_mode = 2
+text = "The game consists of columns of three types of orbs: Purple +, Blue -, and Orange o,  as seen on the right. 
+
+These orbs can be swapped in fixed patterns, indicated by the lines connecting the orbs. The + orb can swap with o orbs below it in adjacent columns. The o orb can swap with - orbs below it, and the - orb can swap with + orbs below it. To swap an orb, tap on it, and tap on the orb to swap with; alternatively you can drag the orbs to swap.
+
+Depending on the game difficulty, every so often the rightmost column of orbs will be removed, and a new column will be added on the left. A rising bar on the right indicates when the next column will be removed. Tapping on the bar removes the column before time is up.
+
+If the number of Purple orbs outnumber the Blue orbs in the removed column, the difference between the number of + and - orbs is counted, and considered the score for that round, indicated by the orbs moving upwards. Otherwise, the orbs move downwards, are destroyed, and the round is not counted.
+
+The goal is to get the rightmost column to be all Purple + orbs to get the maximum score. Failing that, avoid any Purple + orbs, so that the unnecessary orbs are destroyed."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="StartContainer" type="HBoxContainer" parent="TitleUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -193.0
+offset_top = -71.0
+offset_right = 193.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="StartButton" type="Button" parent="TitleUI/StartContainer"]
+layout_mode = 2
+text = "Start
+"
+
+[node name="InstructionButton" type="Button" parent="TitleUI/StartContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "Instructions
+"
+
+[connection signal="resized" from="TitleUI" to="TitleUI" method="_on_resized"]
+[connection signal="toggled" from="TitleUI/StyleUI/StyleOpts/EndlessButton" to="TitleUI" method="_on_endless_toggled"]
+[connection signal="toggled" from="TitleUI/StyleUI/StyleOpts/ClassicButton" to="TitleUI" method="_on_classic_toggled"]
+[connection signal="toggled" from="TitleUI/StyleUI/StyleOpts/PerfectionistButton" to="TitleUI" method="_on_perfectionist_toggled"]
+[connection signal="toggled" from="TitleUI/DifficultyUI/DifficultyOpts/EasyButton" to="TitleUI" method="_on_easy_button_toggled"]
+[connection signal="toggled" from="TitleUI/DifficultyUI/DifficultyOpts/NormalButton" to="TitleUI" method="_on_normal_button_toggled"]
+[connection signal="toggled" from="TitleUI/DifficultyUI/DifficultyOpts/HardButton" to="TitleUI" method="_on_hard_button_toggled"]
+[connection signal="pressed" from="TitleUI/StartContainer/StartButton" to="TitleUI" method="_on_start_button_pressed"]
+[connection signal="toggled" from="TitleUI/StartContainer/InstructionButton" to="TitleUI" method="_on_instruction_button_toggled"]
