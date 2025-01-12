@@ -219,62 +219,6 @@ func game_end():
 		ROWS, ROUNDS, scoredSteps)
 	root.add_child(next_level)
 	return
-	
-	$UI.get_node("Score").text = ""
-	$Button.text = "Start"
-	$ScoreIndicator.reset()
-	# Delete all orbs
-	for orb in orbDict:
-		orbDict[orb].disconnect_all()
-		orbDict[orb].queue_free()
-	orbDict.clear()
-	# Set game running to false, for reset
-	game_running = false
-	
-	var avg_score = 0.0
-	match gameStyle:
-		Util.STYLE.CLASSIC:
-			avg_score = float(score) / float(ROUNDS * ROWS)
-		Util.STYLE.ENDLESS:
-			if(scoredSteps):
-				avg_score = float(score) / float(scoredSteps) / float(ROWS)
-			else:
-				avg_score = 0
-		Util.STYLE.PERFECT:
-			# Arbitrary. Let 12 perfect rounds be the best
-			avg_score = float(scoredSteps) / 12.0
-	# Output flavor text based on average score
-	if(avg_score >= 1.0):
-		$FinalScore.text = "PERFECT!!"
-		$FinalScore.modulate = Color.GOLD
-	elif(avg_score >= 7.0/8.0):
-		$FinalScore.text = "Great!"
-		$FinalScore.modulate = Color.SILVER
-	elif(avg_score >= 3.0/4.0):
-		$FinalScore.text = "Good"
-		$FinalScore.modulate = Color.CADET_BLUE
-	elif(avg_score >= 0.5):
-		$FinalScore.text = "Nice"
-		$FinalScore.modulate = Color.SANDY_BROWN
-	else:
-		$FinalScore.text = "Terrible"
-		$FinalScore.modulate = Color.DARK_SEA_GREEN
-	match gameStyle:
-		Util.STYLE.CLASSIC:
-			$FinalScore.text += "\nScore: " + str(score) + " / " + str(ROUNDS * ROWS)
-		Util.STYLE.ENDLESS:
-			if scoredSteps:
-				$FinalScore.text += "\n Avg score: " + str(score / scoredSteps) + " / " + str(ROWS)
-			else:
-				$FinalScore.text += "\n Avg score: 0 / " + str(ROWS)
-		Util.STYLE.PERFECT:
-			$FinalScore.text += "\n Perfect rounds: " + str(scoredSteps)
-	$FinalScore.show()
-	
-	# Create a final score timer
-	$BurnTimer.start(RESET_TIME)
-	$BurnBar.max_value = RESET_TIME
-	$BurnBar.value = 0
 
 func _on_timer_timeout() -> void:
 	# This timeout is for a game reset
@@ -314,7 +258,7 @@ func _on_timer_timeout() -> void:
 	# Move final column based on score
 	for row in range(ROWS):
 		var index = Vector2i(0, row)
-		if(roundScore < 0):
+		if(roundScore <= 0):
 			orbDict[index].dest.y = 10000
 			if(orbDict[index].type == 2 and !orbDict[index].burned):
 				burnedCount += 1
@@ -323,6 +267,8 @@ func _on_timer_timeout() -> void:
 				burnedCount += 1
 			orbDict[index].dest.y = -10000
 		orbDict[index].queue_redraw()
+		
+	$BurnOrbs.pitch_scale = 0.5
 	
 	if(roundScore > 0):
 		# Game end for perfect mode
@@ -335,20 +281,25 @@ func _on_timer_timeout() -> void:
 		#else:
 		#	perfectSteps = 0
 		
+		
 		# Apply multiplier to score
 		score += (roundScore - burnedCount) * (perfectSteps + 1)
 		if roundScore == ROWS:
 			$ScoreIndicator.text = "Perfect!"
 			$ScoreIndicator.modulate = Color.AQUA
+			$BurnOrbs.pitch_scale = 1
 		elif(roundScore > ROWS * 3.0 / 4.0):
 			$ScoreIndicator.text = "Nice"
 			$ScoreIndicator.modulate = Color.WHITE
+			$BurnOrbs.pitch_scale = 2
 		elif(roundScore > ROWS / 2.0):
 			$ScoreIndicator.text = "Okay"
 			$ScoreIndicator.modulate = Color.GOLD
+			$BurnOrbs.pitch_scale = 3
 		else:
 			$ScoreIndicator.text = "Meh."
 			$ScoreIndicator.modulate = Color.WEB_GRAY
+			$BurnOrbs.pitch_scale = 4
 			
 		$ScoreIndicator.reset()
 		$ScoreIndicator.show()
@@ -378,6 +329,7 @@ func _on_timer_timeout() -> void:
 			if(scoredSteps > 0):
 				$UI.get_node("Score").text = str(score / scoredSteps)
 	
+	$BurnOrbs.play()
 	$BurnTimer.start(BURN_TIME)
 	$BurnBar.max_value = BURN_TIME
 	$BurnBar.value = 0

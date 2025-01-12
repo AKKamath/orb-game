@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2u3ab8aorqqg"]
+[gd_scene load_steps=6 format=3 uid="uid://b2u3ab8aorqqg"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_ye45a"]
 [ext_resource type="PackedScene" uid="uid://cefkthik5xabh" path="res://orb.tscn" id="2_icx0f"]
 [ext_resource type="Script" path="res://score_indicator.gd" id="3_femau"]
+[ext_resource type="AudioStream" uid="uid://dc0rugrd75w1e" path="res://marble-83124.mp3" id="4_et5am"]
+[ext_resource type="AudioStream" uid="uid://cpfsl3nre6hpg" path="res://glass-wind-157910.mp3" id="4_yxbt6"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_ye45a")
@@ -99,6 +101,14 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 55
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BurnOrbs" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_et5am")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_yxbt6")
+autoplay = true
+parameters/looping = true
 
 [connection signal="timeout" from="ScoreIndicator/IndicatorTimer" to="ScoreIndicator" method="_on_indicator_timer_timeout"]
 [connection signal="gui_input" from="BurnBar" to="." method="_on_burn_bar_gui_input"]
