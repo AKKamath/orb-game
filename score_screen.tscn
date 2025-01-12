@@ -1,27 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cset3neym8nhv"]
+[gd_scene load_steps=3 format=3 uid="uid://cset3neym8nhv"]
 
 [ext_resource type="Script" path="res://score_screen.gd" id="1_3s7dn"]
+[ext_resource type="Theme" uid="uid://fmwk4dgdidfw" path="res://main_theme.tres" id="2_a2r0j"]
 
 [node name="ScoreScreen" type="Node"]
 script = ExtResource("1_3s7dn")
-
-[node name="FinalScore" type="Label" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 55
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="BurnBar" type="ProgressBar" parent="."]
 modulate = Color(1, 0.505882, 0.266667, 1)
@@ -38,3 +21,41 @@ show_percentage = false
 
 [node name="BurnTimer" type="Timer" parent="."]
 wait_time = 500.0
+
+[node name="UIElems" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.5
+offset_top = -38.0
+offset_right = 160.5
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_a2r0j")
+
+[node name="FinalScore" type="Label" parent="UIElems"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 55
+text = "BLALAGAGA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonCont" type="HBoxContainer" parent="UIElems"]
+layout_mode = 2
+alignment = 1
+
+[node name="Replay" type="Button" parent="UIElems/ButtonCont"]
+layout_mode = 2
+text = "Replay"
+
+[node name="Exit" type="Button" parent="UIElems/ButtonCont"]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="UIElems/ButtonCont/Replay" to="." method="_on_replay_pressed"]
+[connection signal="pressed" from="UIElems/ButtonCont/Exit" to="." method="_on_continue_pressed"]

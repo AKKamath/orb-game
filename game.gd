@@ -1,15 +1,6 @@
 extends Node
 @export var orbObj : PackedScene
 
-enum STYLE {
-	CLASSIC = 0,
-	ENDLESS = 1,
-	PERFECT = 2,
-}
-
-const ROWS = 8
-const COLS = 10
-
 var BURN_TIME = 10
 var RESET_TIME = 50
 var ROUNDS = 10
@@ -28,7 +19,11 @@ var steps = 0
 var scoredSteps = 0
 var perfectSteps = 0
 var game_running = false
-var gameStyle = STYLE.CLASSIC
+var gameStyle = Util.STYLE.CLASSIC
+var difficulty
+
+const ROWS = 8
+const COLS = 10
 
 # Calculate the on-screen position of a given (x, y) orb inside box
 func calc_pos(x : int, y : int):
@@ -112,7 +107,7 @@ func _ready() -> void:
 	offset.y = radius / 2
 	$ScoreBar.size.y = radius / 2
 	
-	if(gameStyle != STYLE.CLASSIC):
+	if(gameStyle != Util.STYLE.CLASSIC):
 		$ScoreBar.hide()
 	
 	# Reset vars
@@ -211,6 +206,20 @@ func _on_orb_clicked(index: Vector2i, clicked: bool, dragged : bool) -> void:
 	pass # Replace with function body.
 
 func game_end():
+	var root = get_parent()
+	# Remove the title screen
+	var level = root.get_node("Game")
+	root.remove_child(level)
+	level.call_deferred("free")
+
+	# Go to score screen
+	var next_level_resource = load("res://score_screen.tscn")
+	var next_level = next_level_resource.instantiate()
+	next_level.setup_score(score, gameStyle, difficulty, \
+		ROWS, ROUNDS, scoredSteps)
+	root.add_child(next_level)
+	return
+	
 	$UI.get_node("Score").text = ""
 	$Button.text = "Start"
 	$ScoreIndicator.reset()
@@ -224,14 +233,14 @@ func game_end():
 	
 	var avg_score = 0.0
 	match gameStyle:
-		STYLE.CLASSIC:
+		Util.STYLE.CLASSIC:
 			avg_score = float(score) / float(ROUNDS * ROWS)
-		STYLE.ENDLESS:
+		Util.STYLE.ENDLESS:
 			if(scoredSteps):
 				avg_score = float(score) / float(scoredSteps) / float(ROWS)
 			else:
 				avg_score = 0
-		STYLE.PERFECT:
+		Util.STYLE.PERFECT:
 			# Arbitrary. Let 12 perfect rounds be the best
 			avg_score = float(scoredSteps) / 12.0
 	# Output flavor text based on average score
@@ -251,14 +260,14 @@ func game_end():
 		$FinalScore.text = "Terrible"
 		$FinalScore.modulate = Color.DARK_SEA_GREEN
 	match gameStyle:
-		STYLE.CLASSIC:
+		Util.STYLE.CLASSIC:
 			$FinalScore.text += "\nScore: " + str(score) + " / " + str(ROUNDS * ROWS)
-		STYLE.ENDLESS:
+		Util.STYLE.ENDLESS:
 			if scoredSteps:
 				$FinalScore.text += "\n Avg score: " + str(score / scoredSteps) + " / " + str(ROWS)
 			else:
 				$FinalScore.text += "\n Avg score: 0 / " + str(ROWS)
-		STYLE.PERFECT:
+		Util.STYLE.PERFECT:
 			$FinalScore.text += "\n Perfect rounds: " + str(scoredSteps)
 	$FinalScore.show()
 	
@@ -317,7 +326,7 @@ func _on_timer_timeout() -> void:
 	
 	if(roundScore > 0):
 		# Game end for perfect mode
-		if(roundScore - burnedCount != ROWS and gameStyle == STYLE.PERFECT):
+		if(roundScore - burnedCount != ROWS and gameStyle == Util.STYLE.PERFECT):
 			game_end()
 			return
 		# Check if perfect row to apply multiplier
@@ -361,11 +370,11 @@ func _on_timer_timeout() -> void:
 	for row in range(ROWS):
 		connect_orbs(orbDict[Vector2i(1, row)])
 	match gameStyle:
-		STYLE.CLASSIC:
+		Util.STYLE.CLASSIC:
 			$UI.get_node("Score").text = str(score)
-		STYLE.PERFECT:
+		Util.STYLE.PERFECT:
 			$UI.get_node("Score").text = str(scoredSteps)
-		STYLE.ENDLESS:
+		Util.STYLE.ENDLESS:
 			if(scoredSteps > 0):
 				$UI.get_node("Score").text = str(score / scoredSteps)
 	
@@ -374,7 +383,7 @@ func _on_timer_timeout() -> void:
 	$BurnBar.value = 0
 	
 	# Game end for classic mode
-	if(scoredSteps == ROUNDS and gameStyle == STYLE.CLASSIC):
+	if(scoredSteps == ROUNDS and gameStyle == Util.STYLE.CLASSIC):
 		game_end()
 	
 	pass # Replace with function body.

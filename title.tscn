@@ -1,20 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://b150k27mk383v"]
+[gd_scene load_steps=6 format=3 uid="uid://b150k27mk383v"]
 
+[ext_resource type="Theme" uid="uid://fmwk4dgdidfw" path="res://main_theme.tres" id="1_2vcow"]
 [ext_resource type="Script" path="res://title.gd" id="1_8su1p"]
 [ext_resource type="PackedScene" uid="uid://cefkthik5xabh" path="res://orb.tscn" id="2_j6j53"]
 [ext_resource type="ButtonGroup" uid="uid://duve4ich3ukkp" path="res://style_buttongroup.tres" id="3_2kblo"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gjkm"]
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="Theme" id="Theme_slhqg"]
-default_font_size = 45
-BoxContainer/constants/separation = 40
-Button/styles/pressed = SubResource("StyleBoxFlat_4gjkm")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_pvtb1"]
 
@@ -27,7 +16,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_slhqg")
+theme = ExtResource("1_2vcow")
 script = ExtResource("1_8su1p")
 orbObj = ExtResource("2_j6j53")
 
@@ -58,6 +47,7 @@ offset_left = 4477.0
 offset_top = 2000.0
 offset_right = 4477.0
 offset_bottom = 2084.0
+theme_override_constants/separation = 0
 alignment = 2
 
 [node name="StyleOpts" type="HBoxContainer" parent="TitleUI/StyleUI"]
@@ -104,6 +94,7 @@ offset_left = 3600.0
 offset_top = 2400.0
 offset_right = 3640.0
 offset_bottom = 2440.0
+theme_override_constants/separation = 0
 
 [node name="DifficultyOpts" type="HBoxContainer" parent="TitleUI/DifficultyUI"]
 layout_mode = 2
