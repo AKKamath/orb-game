@@ -28,7 +28,7 @@ const COLS = 10
 # Calculate the on-screen position of a given (x, y) orb inside box
 func calc_pos(x : int, y : int):
 	return Vector2(x * box.x / COLS + radius, 
-				y * box.y / ROWS + radius + ((x + steps) % 2) * radius)
+				y * box.y / ROWS + radius + ((x + steps) % 2) * (box.y / ROWS) / 2)
 
 # Connect the orb to its neighbors
 func connect_orbs(newOrb):
@@ -99,6 +99,26 @@ func get_orb_nbors(index : Vector2i):
 			neighbors.append(orbDict[Vector2i(x + 1, y - 1)])
 	return neighbors
 
+func _on_ui_resized() -> void:
+	box = get_viewport().size * 0.85
+	offset = get_viewport().size * 0.15 / 2
+	radius = min(box.x / COLS, box.y / ROWS) / 2
+	offset.y = radius / 2
+	$ScoreBar.size.y = radius / 2
+	$BurnBar.size.x = offset.x
+	$BurnBar.position.x = get_viewport().size.x - $BurnBar.size.x
+	for i in range(COLS):
+		for j in range(ROWS):
+			if Vector2i(i, j) in orbDict:
+				var newOrb = orbDict[Vector2i(i, j)]
+				# Initialize orb data
+				var pos = calc_pos(i, j) + offset
+				newOrb.dest = pos
+				newOrb.position = pos
+				newOrb.radius = radius
+				newOrb.redraw()
+				
+		
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	box = get_viewport().size * 0.85
@@ -106,6 +126,8 @@ func _ready() -> void:
 	radius = min(box.x / COLS, box.y / ROWS) / 2
 	offset.y = radius / 2
 	$ScoreBar.size.y = radius / 2
+	$BurnBar.size.x = offset.x
+	$BurnBar.position.x = get_viewport().size.x - $BurnBar.size.x
 	
 	if(gameStyle != Util.STYLE.CLASSIC):
 		$ScoreBar.hide()
@@ -121,7 +143,6 @@ func _ready() -> void:
 	for i in range(COLS):
 		create_new_col(i)
 	
-	$FinalScore.hide()
 	# Reset UI elements
 	$Button.text = "Stop"
 	$UI.get_node("Score").text = ""

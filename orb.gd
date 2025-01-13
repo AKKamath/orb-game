@@ -74,6 +74,12 @@ func redraw():
 	$CollisionShape2D.shape.radius = radius
 	$MeshInstance2D.scale.x = radius * 2 * 0.8
 	$MeshInstance2D.scale.y = radius * 2 * 0.8
+	for orb in connectedLines:
+		var line : Line2D = connectedLines[orb]
+		line.clear_points()
+		line.add_point(Vector2.ZERO)
+		line.add_point(orb.dest - dest)
+		line.set_width(radius / 5)
 	_draw()
 	
 func can_swap(orb):

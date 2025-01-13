@@ -1,17 +1,15 @@
 extends Label
 
 var SPEED = 120
-var startPos
 var curColor
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	startPos = position
 	pass # Replace with function body.
 
 func reset():
-	position = startPos
+	position = (get_viewport().size - Vector2i(size)) / 2
 	modulate.a8 = 255
 	$IndicatorTimer.start(0.75)
 	

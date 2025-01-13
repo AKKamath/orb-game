@@ -54,10 +54,14 @@ show_percentage = false
 wait_time = 500.0
 
 [node name="UI" type="Control" parent="."]
+z_index = -10
 layout_mode = 3
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -4707.0
 grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Score" type="Label" parent="UI"]
 layout_mode = 1
@@ -84,24 +88,6 @@ offset_bottom = 8.0
 theme_override_font_sizes/font_size = 55
 text = "RESET"
 
-[node name="FinalScore" type="Label" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 55
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="BurnOrbs" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_et5am")
 
@@ -113,4 +99,5 @@ parameters/looping = true
 [connection signal="timeout" from="ScoreIndicator/IndicatorTimer" to="ScoreIndicator" method="_on_indicator_timer_timeout"]
 [connection signal="gui_input" from="BurnBar" to="." method="_on_burn_bar_gui_input"]
 [connection signal="timeout" from="BurnTimer" to="." method="_on_timer_timeout"]
+[connection signal="resized" from="UI" to="." method="_on_ui_resized"]
 [connection signal="gui_input" from="Button" to="." method="_on_button_gui_input"]
