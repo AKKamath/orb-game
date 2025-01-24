@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b150k27mk383v"]
+[gd_scene load_steps=8 format=3 uid="uid://b150k27mk383v"]
 
 [ext_resource type="Theme" uid="uid://fmwk4dgdidfw" path="res://main_theme.tres" id="1_2vcow"]
 [ext_resource type="Script" path="res://title.gd" id="1_8su1p"]
@@ -6,6 +6,16 @@
 [ext_resource type="ButtonGroup" uid="uid://duve4ich3ukkp" path="res://style_buttongroup.tres" id="3_2kblo"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_pvtb1"]
+
+[sub_resource type="Gradient" id="Gradient_o6oj8"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.516234, 1)
+colors = PackedColorArray(0.313726, 0.313726, 0.313726, 1, 0.235294, 0.235294, 0.235294, 1, 0.313726, 0.313726, 0.333333, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ip1o4"]
+gradient = SubResource("Gradient_o6oj8")
+width = 512
+height = 512
 
 [node name="TitleScreen" type="Node"]
 
@@ -66,21 +76,21 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 toggle_mode = true
 button_group = ExtResource("3_2kblo")
-text = "Endless"
+text = " Endless "
 
 [node name="ClassicButton" type="Button" parent="TitleUI/StyleUI/StyleOpts"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 toggle_mode = true
 button_group = ExtResource("3_2kblo")
-text = "Classic"
+text = " Classic "
 
 [node name="PerfectionistButton" type="Button" parent="TitleUI/StyleUI/StyleOpts"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 toggle_mode = true
 button_group = ExtResource("3_2kblo")
-text = "Perfectionist"
+text = " Perfectionist "
 
 [node name="TypeDescription" type="Label" parent="TitleUI/StyleUI"]
 layout_mode = 2
@@ -111,21 +121,21 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 toggle_mode = true
 button_group = SubResource("ButtonGroup_pvtb1")
-text = "Easy"
+text = " Easy "
 
 [node name="NormalButton" type="Button" parent="TitleUI/DifficultyUI/DifficultyOpts"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 toggle_mode = true
 button_group = SubResource("ButtonGroup_pvtb1")
-text = "Normal"
+text = " Normal "
 
 [node name="HardButton" type="Button" parent="TitleUI/DifficultyUI/DifficultyOpts"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 toggle_mode = true
 button_group = SubResource("ButtonGroup_pvtb1")
-text = "Hard"
+text = " Hard "
 
 [node name="DifficultyDescription" type="Label" parent="TitleUI/DifficultyUI"]
 layout_mode = 2
@@ -184,6 +194,17 @@ layout_mode = 2
 toggle_mode = true
 text = "Instructions
 "
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -2000
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_ip1o4")
+stretch_mode = 1
 
 [connection signal="resized" from="TitleUI" to="TitleUI" method="_on_resized"]
 [connection signal="toggled" from="TitleUI/StyleUI/StyleOpts/EndlessButton" to="TitleUI" method="_on_endless_toggled"]

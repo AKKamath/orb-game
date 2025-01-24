@@ -25,12 +25,6 @@ func connect_orbs(newOrb):
 		elif (j > 0):
 			newOrb.connect_orb(orbDict[Vector2i(i - 1, j - 1)])
 
-var TCOLOR = {
-	0 : Color.CADET_BLUE,
-	1 : Color.CHOCOLATE,
-	2 : Color.DARK_ORCHID,
-}
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Setup initial options
@@ -40,15 +34,12 @@ func _ready() -> void:
 	style = Util.STYLE.CLASSIC
 	
 	# Add color to our buttons
-	$StyleUI/StyleOpts/EndlessButton.modulate       = TCOLOR[0]
-	$StyleUI/StyleOpts/ClassicButton.modulate       = TCOLOR[1]
-	$StyleUI/StyleOpts/PerfectionistButton.modulate = TCOLOR[2]
-	
+	$StyleUI/StyleOpts/EndlessButton.modulate       = Util.TYPE_COLOR[0]
+	$StyleUI/StyleOpts/ClassicButton.modulate       = Util.TYPE_COLOR[1]
+	$StyleUI/StyleOpts/PerfectionistButton.modulate = Util.TYPE_COLOR[2]
 	
 	$InsBox.hide()
 	$InsPanel.hide()
-	var radius = 10
-	var box = $InsPanel.size
 	# Setup instruction orbs
 	for i in range(COLS):
 		for j in range(ROWS):
@@ -133,50 +124,56 @@ func _process(delta: float) -> void:
 
 
 func _on_easy_button_toggled(toggled_on: bool) -> void:
-	difficulty = Util.DIFF.EASY
-	$Title/orb.type = 0
-	$Title/orb.queue_redraw()
-	$DifficultyUI/DifficultyDescription.text = "Orbs are removed every 15 seconds."
+	if toggled_on:
+		difficulty = Util.DIFF.EASY
+		$Title/orb.type = 0
+		$Title/orb.queue_redraw()
+		$DifficultyUI/DifficultyDescription.text = "Orbs are removed every 15 seconds."
 	pass # Replace with function body.
 
 
 func _on_normal_button_toggled(toggled_on: bool) -> void:
-	difficulty = Util.DIFF.NORMAL
-	$Title/orb.type = 1
-	$Title/orb.queue_redraw()
-	$DifficultyUI/DifficultyDescription.text = "Orbs are removed every 10 seconds."
+	if toggled_on:
+		difficulty = Util.DIFF.NORMAL
+		$Title/orb.type = 1
+		$Title/orb.queue_redraw()
+		$DifficultyUI/DifficultyDescription.text = "Orbs are removed every 10 seconds."
 	pass # Replace with function body.
 
 
 func _on_hard_button_toggled(toggled_on: bool) -> void:
-	difficulty = Util.DIFF.HARD
-	$Title/orb.type = 2
-	$Title/orb.queue_redraw()
-	$DifficultyUI/DifficultyDescription.text = "Orbs are removed every 5 seconds."
+	if toggled_on:
+		difficulty = Util.DIFF.HARD
+		$Title/orb.type = 2
+		$Title/orb.queue_redraw()
+		$DifficultyUI/DifficultyDescription.text = "Orbs are removed every 5 seconds."
 	pass # Replace with function body.
 
 
 func _on_classic_toggled(toggled_on: bool) -> void:
-	style = Util.STYLE.CLASSIC
-	$Title/orb.type = 1
-	$Title/orb.queue_redraw()
-	$StyleUI/TypeDescription.text = "Classic gameplay. 10 scored rounds."
+	if toggled_on:
+		style = Util.STYLE.CLASSIC
+		$Title/orb.type = 1
+		$Title/orb.queue_redraw()
+		$StyleUI/TypeDescription.text = "Classic gameplay. 10 scored rounds."
 	pass # Replace with function body.
 
 
 func _on_endless_toggled(toggled_on: bool) -> void:
-	style = Util.STYLE.ENDLESS
-	$Title/orb.type = 0
-	$Title/orb.queue_redraw()
-	$StyleUI/TypeDescription.text = "Endless rounds. Score is average per round."
+	if toggled_on:
+		style = Util.STYLE.ENDLESS
+		$Title/orb.type = 0
+		$Title/orb.queue_redraw()
+		$StyleUI/TypeDescription.text = "Endless rounds. Score is average per round."
 	pass # Replace with function body.
 
 
 func _on_perfectionist_toggled(toggled_on: bool) -> void:
-	style = Util.STYLE.PERFECT
-	$Title/orb.type = 2
-	$Title/orb.queue_redraw()
-	$StyleUI/TypeDescription.text = "Scored column must be all positive orbs. Score is rounds survived."
+	if toggled_on:
+		style = Util.STYLE.PERFECT
+		$Title/orb.type = 2
+		$Title/orb.queue_redraw()
+		$StyleUI/TypeDescription.text = "Scored column must be all positive orbs. Score is rounds survived."
 	pass # Replace with function body.
 
 
@@ -209,4 +206,5 @@ func _on_instruction_button_toggled(toggled_on: bool) -> void:
 	$StyleUI.visible = !toggled_on
 	$DifficultyUI.visible = !toggled_on
 	$StartContainer/StartButton.visible = !toggled_on
+	$StartContainer/InstructionButton.text = "Back" if toggled_on else "Instructions"
 	pass # Replace with function body.

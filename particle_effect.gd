@@ -17,7 +17,7 @@ func reset():
 	else:
 		position.x = vp.x
 	position.y = randf_range(0, vp.y * 3 / 4)
-	SPEED = Vector2(vp.x / 5, randf_range(0, vp.y / 5))
+	SPEED = Vector2(randf_range(vp.x / 5, vp.x / 3), randf_range(0, vp.y / 5))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

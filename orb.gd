@@ -10,10 +10,9 @@ signal clicked(index, selected, dragged)
 const BASE_SPEED = 300
 const SWAP_SPEED = 1000
 
-var TYPE_COLOR = {
-	0 : Color.CADET_BLUE,
-	1 : Color.CHOCOLATE,
-	2 : Color.DARK_ORCHID,
+enum LIGHTING {
+	EXPAND = 0,
+	CONTRACT = 1,
 }
 
 var dest
@@ -56,7 +55,9 @@ func disconnect_all():
 	connectedLines.clear()
 	connectedOrbs.clear()
 	queue_redraw()
-
+var light_base_scale
+var light_dir = LIGHTING.EXPAND
+var LIGHTING_SPEED = 0.02
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	queue_redraw()
@@ -64,7 +65,7 @@ func _ready() -> void:
 		dest = position
 	highlighted = false
 	SPEED = BASE_SPEED#get_viewport().size.x * 0.2
-	
+	light_base_scale = $MeshInstance2D/InnerLight.scale
 	# Init sizes
 	$CollisionShape2D.shape.radius = radius
 	$MeshInstance2D.scale.x = radius * 2 * 0.8
@@ -80,7 +81,7 @@ func redraw():
 		line.add_point(Vector2.ZERO)
 		line.add_point(orb.dest - dest)
 		line.set_width(radius / 5)
-	_draw()
+	queue_redraw()
 	
 func can_swap(orb):
 	return ((orb.type - type == 1 || orb.type - type == -2) and orb.dest.y < dest.y) or \
@@ -101,15 +102,15 @@ func _draw() -> void:
 				#	draw_line(Vector2.ZERO, orb.dest - dest, Color.BISQUE, 5)
 	
 	if highlighted:
-		draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(-0.7), false, radius * 0.1)
+		draw_circle(Vector2.ZERO, radius * 0.8, Util.TYPE_COLOR[type].darkened(-0.7), false, radius * 0.1)
 	else:
-		draw_circle(Vector2.ZERO, radius * 0.8, Color.BLACK, false, 3)
+		draw_circle(Vector2.ZERO, radius * 0.8, Util.TYPE_COLOR[type].darkened(0.7), false, 5)
 
 	if burned:
-		$MeshInstance2D.texture.gradient.set_color(0, TYPE_COLOR[type].darkened(0.6))
+		$MeshInstance2D.texture.gradient.set_color(0, Util.TYPE_COLOR[type].darkened(0.6))
 		#draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type].darkened(0.6))
 	else:
-		$MeshInstance2D.texture.gradient.set_color(0, TYPE_COLOR[type])
+		$MeshInstance2D.texture.gradient.set_color(0, Util.TYPE_COLOR[type])
 		#draw_circle(Vector2.ZERO, radius * 0.8, TYPE_COLOR[type])
 
 	# Draw +
@@ -132,13 +133,11 @@ func swap(node):
 	index = node.index
 	node.index = temp_ind
 	
-	highlighted = false
 	disconnect_all()
-	queue_redraw()
+	highlight(false)
 	
-	node.highlighted = false
 	node.disconnect_all()
-	node.queue_redraw()
+	node.highlight(false)
 	
 	node.SPEED = SWAP_SPEED
 	SPEED = SWAP_SPEED
@@ -152,9 +151,20 @@ func _process(delta: float) -> void:
 			SPEED = BASE_SPEED
 		else:
 			position += position.direction_to(dest) * SPEED * delta
+	if highlighted:
+		if light_dir == LIGHTING.EXPAND:
+			$MeshInstance2D/InnerLight.scale += Vector2(delta, delta) * LIGHTING_SPEED
+			if $MeshInstance2D/InnerLight.scale > light_base_scale * 2:
+				light_dir = LIGHTING.CONTRACT
+		else:
+			$MeshInstance2D/InnerLight.scale -= Vector2(delta, delta) * LIGHTING_SPEED
+			if $MeshInstance2D/InnerLight.scale < light_base_scale:
+				light_dir = LIGHTING.EXPAND
+		
 	pass
 	
 func highlight(on : bool):
+	$MeshInstance2D/InnerLight.visible = on
 	highlighted = on
 	queue_redraw()
 	

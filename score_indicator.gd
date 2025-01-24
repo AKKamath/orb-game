@@ -17,7 +17,7 @@ func reset():
 func _process(delta: float) -> void:
 	if is_visible():
 		position += position.direction_to(Vector2(position.x, 0)) * SPEED * delta
-		modulate.a8 -= delta * SPEED
+		modulate.a8 -= int(delta * SPEED)
 	pass
 
 func _on_indicator_timer_timeout() -> void:

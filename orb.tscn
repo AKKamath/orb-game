@@ -1,22 +1,25 @@
-[gd_scene load_steps=10 format=3 uid="uid://cefkthik5xabh"]
+[gd_scene load_steps=17 format=3 uid="uid://cefkthik5xabh"]
 
 [ext_resource type="Script" path="res://orb.gd" id="1_68io8"]
+[ext_resource type="Texture2D" uid="uid://bn22lc7bmn4hk" path="res://orb_shading.png" id="2_fx2fs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4aft"]
 radius = 15.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2oom5"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_bl1t7"]
+material = SubResource("ShaderMaterial_2oom5")
 
-[sub_resource type="Gradient" id="Gradient_pv2ln"]
+[sub_resource type="Gradient" id="Gradient_hgdjf"]
 resource_local_to_scene = true
-offsets = PackedFloat32Array(1)
-colors = PackedColorArray(1, 1, 0.427451, 0.686275)
+interpolation_mode = 1
+colors = PackedColorArray(1, 1, 1, 0.541176, 1, 1, 1, 0.545098)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_wxqe8"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_45it1"]
 resource_local_to_scene = true
-gradient = SubResource("Gradient_pv2ln")
-fill = 1
-fill_from = Vector2(0.915138, 0.0733945)
+gradient = SubResource("Gradient_hgdjf")
+fill_from = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="Gradient_3tnbf"]
 offsets = PackedFloat32Array(0.522727, 1)
@@ -37,6 +40,25 @@ gradient = SubResource("Gradient_pro67")
 fill = 1
 fill_from = Vector2(0, 1)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_wd88v"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_g3cee"]
+offsets = PackedFloat32Array(0.00649351, 0.775974)
+colors = PackedColorArray(0.619608, 0.619608, 0.619608, 0.67451, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3s8n2"]
+gradient = SubResource("Gradient_g3cee")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.25, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0bf23"]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hdo5r"]
+blend_mode = 2
+
 [node name="orb" type="Area2D"]
 position = Vector2(252, 134)
 script = ExtResource("1_68io8")
@@ -52,18 +74,40 @@ light_mask = 257
 z_index = -1
 scale = Vector2(64, 64)
 mesh = SubResource("SphereMesh_bl1t7")
-texture = SubResource("GradientTexture2D_wxqe8")
+texture = SubResource("GradientTexture2D_45it1")
 
 [node name="PointLight2D" type="PointLight2D" parent="MeshInstance2D"]
+visible = false
 scale = Vector2(0.015625, 0.015625)
 range_item_cull_mask = 256
 texture = SubResource("GradientTexture2D_7thgw")
 
 [node name="PointLight2D2" type="PointLight2D" parent="MeshInstance2D"]
+visible = false
 scale = Vector2(0.015625, 0.015625)
 blend_mode = 1
 range_item_cull_mask = 256
 texture = SubResource("GradientTexture2D_yhwu5")
+
+[node name="InnerLight" type="Sprite2D" parent="MeshInstance2D"]
+visible = false
+material = SubResource("CanvasItemMaterial_wd88v")
+scale = Vector2(0.016, 0.016)
+texture = SubResource("GradientTexture2D_3s8n2")
+
+[node name="Sprite2D" type="Sprite2D" parent="MeshInstance2D"]
+material = SubResource("CanvasItemMaterial_0bf23")
+position = Vector2(-2.09548e-08, 2.09548e-08)
+scale = Vector2(0.016, 0.016)
+texture = ExtResource("2_fx2fs")
+
+[node name="Sprite2D2" type="Sprite2D" parent="MeshInstance2D"]
+material = SubResource("CanvasItemMaterial_hdo5r")
+position = Vector2(-1.41561e-07, 4.14439e-08)
+scale = Vector2(0.016, 0.016)
+texture = ExtResource("2_fx2fs")
+flip_h = true
+flip_v = true
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

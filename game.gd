@@ -117,7 +117,15 @@ func _on_ui_resized() -> void:
 				newOrb.position = pos
 				newOrb.radius = radius
 				newOrb.redraw()
-				
+	$Uplight.position.x = (calc_pos(COLS - 1, ROWS - 1) + offset).x
+	$Uplight.position.y = box.x / 2
+	$Uplight.scale.x = radius / 32
+	$Uplight.scale.y = box.y / 32
+	
+	$Downlight.position.x = (calc_pos(COLS - 1, ROWS - 1) + offset).x
+	$Downlight.position.y = get_viewport().size.y - box.x / 2
+	$Downlight.scale.x = radius / 32
+	$Downlight.scale.y = box.y / 32
 		
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -152,6 +160,13 @@ func _ready() -> void:
 	$ScoreBar.max_value = ROUNDS
 	$ScoreBar.value = 0
 	
+	# Do lighting effects
+	$Uplight.texture.gradient.set_color(0, Util.TYPE_COLOR[2])
+	$Downlight.texture.gradient.set_color(0, Util.TYPE_COLOR[0])
+	
+	$Uplight.hide()
+	$Downlight.hide()
+	
 	game_running = true
 	pass # Replace with function body.
 
@@ -159,6 +174,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	$BurnBar.value = $BurnBar.max_value - $BurnTimer.time_left
 	$BurnBar.modulate.r8 = 255 * ($BurnBar.max_value - $BurnTimer.time_left) / $BurnBar.max_value
+	if $BurnBar.value > 0.75:
+		$Uplight.hide()
+		$Downlight.hide()
 	pass
 
 func _on_orb_clicked(index: Vector2i, clicked: bool, dragged : bool) -> void:
@@ -283,44 +301,36 @@ func _on_timer_timeout() -> void:
 			orbDict[index].dest.y = 10000
 			if(orbDict[index].type == 2 and !orbDict[index].burned):
 				burnedCount += 1
+			$Downlight.show()
+			$DownOrbs.play()
 		else:
 			if(orbDict[index].type == 2 and orbDict[index].burned):
 				burnedCount += 1
 			orbDict[index].dest.y = -10000
+			$Uplight.show()
+			$UpOrbs.play()
 		orbDict[index].queue_redraw()
-		
-	$BurnOrbs.pitch_scale = 0.5
 	
 	if(roundScore > 0):
 		# Game end for perfect mode
 		if(roundScore - burnedCount != ROWS and gameStyle == Util.STYLE.PERFECT):
 			game_end()
 			return
-		# Check if perfect row to apply multiplier
-		#if(roundScore == ROWS):
-		#	perfectSteps += 1
-		#else:
-		#	perfectSteps = 0
-		
 		
 		# Apply multiplier to score
 		score += (roundScore - burnedCount) * (perfectSteps + 1)
 		if roundScore == ROWS:
 			$ScoreIndicator.text = "Perfect!"
-			$ScoreIndicator.modulate = Color.AQUA
-			$BurnOrbs.pitch_scale = 1
+			$ScoreIndicator.modulate = Color.PURPLE
 		elif(roundScore > ROWS * 3.0 / 4.0):
 			$ScoreIndicator.text = "Nice"
-			$ScoreIndicator.modulate = Color.WHITE
-			$BurnOrbs.pitch_scale = 2
+			$ScoreIndicator.modulate = Color.GOLD
 		elif(roundScore > ROWS / 2.0):
 			$ScoreIndicator.text = "Okay"
-			$ScoreIndicator.modulate = Color.GOLD
-			$BurnOrbs.pitch_scale = 3
+			$ScoreIndicator.modulate = Color.ORANGE
 		else:
-			$ScoreIndicator.text = "Meh."
-			$ScoreIndicator.modulate = Color.WEB_GRAY
-			$BurnOrbs.pitch_scale = 4
+			$ScoreIndicator.text = "Meh"
+			$ScoreIndicator.modulate = Color.WEB_GREEN
 			
 		$ScoreIndicator.reset()
 		$ScoreIndicator.show()
@@ -333,7 +343,7 @@ func _on_timer_timeout() -> void:
 		$ScoreBar.modulate = color
 	elif burnedCount > 0:
 		$ScoreIndicator.text = "Waste!"
-		$ScoreIndicator.modulate = Color.MEDIUM_PURPLE
+		$ScoreIndicator.modulate = Color.CADET_BLUE
 		$ScoreIndicator.reset()
 		$ScoreIndicator.show()
 	steps += 1
@@ -350,7 +360,6 @@ func _on_timer_timeout() -> void:
 			if(scoredSteps > 0):
 				$UI.get_node("Score").text = str(score / scoredSteps)
 	
-	$BurnOrbs.play()
 	$BurnTimer.start(BURN_TIME)
 	$BurnBar.max_value = BURN_TIME
 	$BurnBar.value = 0
