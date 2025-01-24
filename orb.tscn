@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bn22lc7bmn4hk" path="res://orb_shading.png" id="2_fx2fs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4aft"]
-radius = 15.0
+radius = 32.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2oom5"]
 

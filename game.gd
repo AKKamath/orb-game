@@ -118,12 +118,13 @@ func _on_ui_resized() -> void:
 				newOrb.radius = radius
 				newOrb.redraw()
 	$Uplight.position.x = (calc_pos(COLS - 1, ROWS - 1) + offset).x
-	$Uplight.position.y = box.x / 2
+	$Uplight.position.y = box.y
+	# / 32 instead of 64
 	$Uplight.scale.x = radius / 32
 	$Uplight.scale.y = box.y / 32
 	
 	$Downlight.position.x = (calc_pos(COLS - 1, ROWS - 1) + offset).x
-	$Downlight.position.y = get_viewport().size.y - box.x / 2
+	$Downlight.position.y = get_viewport().size.y - box.y
 	$Downlight.scale.x = radius / 32
 	$Downlight.scale.y = box.y / 32
 		
