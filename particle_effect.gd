@@ -3,25 +3,30 @@ extends Node2D
 enum DIRS {
 	L2R = 0,
 	R2L = 1,
+	NONE,
 }
 
-var target_color : Color
-var direction
+@export var effect : bool
+@export var target_color : Color
+@export var direction : DIRS
 
 var SPEED
 func reset():
 	var vp = get_viewport().size
-	direction = randi() % 2
-	if direction == DIRS.L2R:
-		position.x = 0
-	else:
-		position.x = vp.x
-	position.y = randf_range(0, vp.y * 3 / 4)
-	SPEED = Vector2(randf_range(vp.x / 5, vp.x / 3), randf_range(0, vp.y / 5))
+	if direction != DIRS.NONE:
+		direction = randi() % 2
+		if direction == DIRS.L2R:
+			position.x = 0
+		else:
+			position.x = vp.x
+		position.y = randf_range(0, vp.y * 3 / 4)
+		SPEED = Vector2(randf_range(vp.x / 5, vp.x / 3), randf_range(0, vp.y / 5))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	target_color = Util.TYPE_COLOR[randi() % 3]
+	if effect:
+		target_color = Util.TYPE_COLOR[randi() % 3]
+		$Timer.start(randf_range(1, 2))
 	reset()
 	pass # Replace with function body.
 
@@ -32,7 +37,7 @@ func _process(delta: float) -> void:
 		position += delta * SPEED
 		if(position.x > get_viewport().size.x):
 			reset()
-	else:
+	elif direction == DIRS.R2L:
 		position -= delta * SPEED
 		if(position.x <= 0):
 			reset()

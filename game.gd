@@ -2,7 +2,6 @@ extends Node
 @export var orbObj : PackedScene
 
 var BURN_TIME = 10
-var RESET_TIME = 50
 var ROUNDS = 10
 
 var orbDict = {}
@@ -22,7 +21,7 @@ var game_running = false
 var gameStyle = Util.STYLE.CLASSIC
 var difficulty
 
-const ROWS = 8
+const ROWS = 6
 const COLS = 10
 
 # Calculate the on-screen position of a given (x, y) orb inside box
@@ -127,7 +126,10 @@ func _on_ui_resized() -> void:
 	$Downlight.position.y = get_viewport().size.y - box.y
 	$Downlight.scale.x = radius / 32
 	$Downlight.scale.y = box.y / 32
-		
+	
+	$ParticleEffect.position = get_viewport().size / 2
+
+var bg = [Color(), Color(), Color()]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	box = get_viewport().size * 0.85
@@ -140,6 +142,7 @@ func _ready() -> void:
 	
 	if(gameStyle != Util.STYLE.CLASSIC):
 		$ScoreBar.hide()
+		$ParticleEffect.hide()
 	
 	# Reset vars
 	score = 0
@@ -167,6 +170,10 @@ func _ready() -> void:
 	
 	$Uplight.hide()
 	$Downlight.hide()
+	
+	bg[0] = $Persist/Background.texture.gradient.get_color(0)
+	bg[1] = $Persist/Background.texture.gradient.get_color(1)
+	bg[2] = $Persist/Background.texture.gradient.get_color(2)
 	
 	game_running = true
 	pass # Replace with function body.
@@ -250,7 +257,6 @@ func game_end():
 	# Remove the title screen
 	var level = root.get_node("Game")
 	root.remove_child(level)
-	level.call_deferred("free")
 
 	# Go to score screen
 	var next_level_resource = load("res://score_screen.tscn")
@@ -258,6 +264,13 @@ func game_end():
 	next_level.setup_score(score, gameStyle, difficulty, \
 		ROWS, ROUNDS, scoredSteps)
 	root.add_child(next_level)
+	
+	# Keep persistent features
+	var persist = get_node("Persist")
+	remove_child(persist)
+	next_level.add_child(persist)
+	
+	level.call_deferred("free")
 	return
 
 func _on_timer_timeout() -> void:
@@ -337,11 +350,18 @@ func _on_timer_timeout() -> void:
 		$ScoreIndicator.show()
 		scoredSteps += 1
 		$ScoreBar.value = scoredSteps
-		var color = Color.BLACK
-		color.r8 = 255 * (1 - score / (scoredSteps * float(ROWS)))
-		color.g8 = 255 * (score / (scoredSteps * float(ROWS)))
-		print(color, (1 - score / ROWS), (score / ROWS))
+		#var color = Color.BLACK
+		#color.r8 = 255 * (1 - score / (scoredSteps * float(ROWS)))
+		#color.g8 = 255 * (score / (scoredSteps * float(ROWS)))
+		#print(color, (1 - score / ROWS), (score / ROWS))
+		var color = Util.TYPE_COLOR[0].lerp(Util.TYPE_COLOR[2], score / (scoredSteps * float(ROWS)))
 		$ScoreBar.modulate = color
+		$ParticleEffect.target_color = color
+		$ParticleEffect.scale = Vector2(scoredSteps, scoredSteps) * 2
+		$ParticleEffect/CPUParticles2D.amount = 1000 * scoredSteps
+		
+		$Persist/Background.texture.gradient.set_color(0, bg[0].lerp(color, 0.25))
+		$Persist/Background.texture.gradient.set_color(2, bg[2].lerp(color, 0.25))
 	elif burnedCount > 0:
 		$ScoreIndicator.text = "Waste!"
 		$ScoreIndicator.modulate = Color.CADET_BLUE

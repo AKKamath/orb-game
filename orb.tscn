@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://cefkthik5xabh"]
+[gd_scene load_steps=19 format=3 uid="uid://cefkthik5xabh"]
 
 [ext_resource type="Script" path="res://orb.gd" id="1_68io8"]
 [ext_resource type="Texture2D" uid="uid://bn22lc7bmn4hk" path="res://orb_shading.png" id="2_fx2fs"]
+[ext_resource type="Texture2D" uid="uid://c6acddobempvk" path="res://orb_shading copy.png" id="3_pnkpb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4aft"]
-radius = 32.0
+radius = 15.0333
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2oom5"]
 
@@ -56,6 +57,9 @@ fill_to = Vector2(0.25, 0.5)
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0bf23"]
 blend_mode = 1
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0i31r"]
+blend_mode = 2
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hdo5r"]
 blend_mode = 2
 
@@ -100,6 +104,13 @@ material = SubResource("CanvasItemMaterial_0bf23")
 position = Vector2(-2.09548e-08, 2.09548e-08)
 scale = Vector2(0.016, 0.016)
 texture = ExtResource("2_fx2fs")
+
+[node name="Sprite2D3" type="Sprite2D" parent="MeshInstance2D"]
+visible = false
+material = SubResource("CanvasItemMaterial_0i31r")
+position = Vector2(-2.38419e-07, 0)
+scale = Vector2(0.016, 0.016)
+texture = ExtResource("3_pnkpb")
 
 [node name="Sprite2D2" type="Sprite2D" parent="MeshInstance2D"]
 material = SubResource("CanvasItemMaterial_hdo5r")

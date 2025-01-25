@@ -1,19 +1,21 @@
-[gd_scene load_steps=8 format=3 uid="uid://b150k27mk383v"]
+[gd_scene load_steps=10 format=3 uid="uid://b150k27mk383v"]
 
 [ext_resource type="Theme" uid="uid://fmwk4dgdidfw" path="res://main_theme.tres" id="1_2vcow"]
 [ext_resource type="Script" path="res://title.gd" id="1_8su1p"]
 [ext_resource type="PackedScene" uid="uid://cefkthik5xabh" path="res://orb.tscn" id="2_j6j53"]
 [ext_resource type="ButtonGroup" uid="uid://duve4ich3ukkp" path="res://style_buttongroup.tres" id="3_2kblo"]
+[ext_resource type="PackedScene" uid="uid://dy5dtls2d8cum" path="res://particle_effect.tscn" id="5_hhrik"]
+[ext_resource type="AudioStream" uid="uid://cpfsl3nre6hpg" path="res://glass-wind-157910.mp3" id="6_5vqos"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_pvtb1"]
 
-[sub_resource type="Gradient" id="Gradient_o6oj8"]
+[sub_resource type="Gradient" id="Gradient_erxc8"]
 interpolation_mode = 2
-offsets = PackedFloat32Array(0, 0.516234, 1)
-colors = PackedColorArray(0.313726, 0.313726, 0.313726, 1, 0.235294, 0.235294, 0.235294, 1, 0.313726, 0.313726, 0.333333, 1)
+offsets = PackedFloat32Array(0, 0.522727, 1)
+colors = PackedColorArray(0.352941, 0.352941, 0.352941, 1, 0.235294, 0.235294, 0.235294, 1, 0.352941, 0.352941, 0.352941, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ip1o4"]
-gradient = SubResource("Gradient_o6oj8")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_11w0g"]
+gradient = SubResource("Gradient_erxc8")
 width = 512
 height = 512
 
@@ -50,6 +52,10 @@ vertical_alignment = 1
 position = Vector2(-31.6667, 40)
 radius = 40
 type = 1
+
+[node name="ParticleEffect" parent="TitleUI/Title/orb" instance=ExtResource("5_hhrik")]
+z_index = -5
+effect = true
 
 [node name="StyleUI" type="VBoxContainer" parent="TitleUI"]
 layout_mode = 2
@@ -195,15 +201,22 @@ toggle_mode = true
 text = "Instructions
 "
 
-[node name="TextureRect" type="TextureRect" parent="."]
-z_index = -2000
+[node name="Persist" type="Node" parent="."]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="Persist"]
+stream = ExtResource("6_5vqos")
+autoplay = true
+parameters/looping = true
+
+[node name="Background" type="TextureRect" parent="Persist"]
+z_index = -20
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_ip1o4")
+texture = SubResource("GradientTexture2D_11w0g")
 stretch_mode = 1
 
 [connection signal="resized" from="TitleUI" to="TitleUI" method="_on_resized"]

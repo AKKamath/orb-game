@@ -93,6 +93,7 @@ func _on_resized() -> void:
 	# TITLE: Center-align, 20% vertical space
 	$Title/orb.radius = $Title.size.y / 2
 	$Title/orb.redraw()
+	$Title/orb/MeshInstance2D/InnerLight.show()
 	# To center align, get midpoint by taking screen X - (sizeof title)
 	$Title.position.x = (vp.x - ($Title.size.x * $Title.scale.x + 2 * $Title/orb.radius)) / 2 \
 		+ $Title/orb.radius * 2 + 60
@@ -182,7 +183,7 @@ func _on_start_button_pressed() -> void:
 	# Remove the title screen
 	var level = root.get_node("TitleScreen")
 	root.remove_child(level)
-	level.call_deferred("free")
+	
 
 	# Go to game
 	var next_level_resource = load("res://game.tscn")
@@ -197,7 +198,13 @@ func _on_start_button_pressed() -> void:
 	
 	next_level.gameStyle = style
 	next_level.difficulty = difficulty
+	# Keep persistent features
+	var persist = get_parent().get_node("Persist")
+	get_parent().remove_child(persist)
+	next_level.add_child(persist)
+	
 	root.add_child(next_level)
+	level.call_deferred("free")
 
 
 func _on_instruction_button_toggled(toggled_on: bool) -> void:

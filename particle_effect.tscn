@@ -5,9 +5,9 @@
 [node name="ParticleEffect" type="Node2D"]
 z_index = 10
 script = ExtResource("1_ivj0p")
+direction = 2
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-z_index = -100
 amount = 500
 lifetime = 0.5
 lifetime_randomness = 1.0
@@ -22,6 +22,5 @@ orbit_velocity_max = 1.0
 scale_amount_max = 5.0
 
 [node name="Timer" type="Timer" parent="."]
-autostart = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

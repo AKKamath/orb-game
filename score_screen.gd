@@ -28,19 +28,15 @@ func setup_score(score : int, gameStyle : Util.STYLE, gameDiff : Util.DIFF, ROWS
 	# Output flavor text based on average score
 	if(avg_score >= 1.0):
 		$UIElems/FinalScore.text = "PERFECT!!"
-		$UIElems/FinalScore.modulate = Color.GOLD
 	elif(avg_score >= 7.0/8.0):
 		$UIElems/FinalScore.text = "Great!"
-		$UIElems/FinalScore.modulate = Color.SILVER
 	elif(avg_score >= 3.0/4.0):
 		$UIElems/FinalScore.text = "Good"
-		$UIElems/FinalScore.modulate = Color.CADET_BLUE
 	elif(avg_score >= 0.5):
 		$UIElems/FinalScore.text = "Nice"
-		$UIElems/FinalScore.modulate = Color.SANDY_BROWN
 	else:
 		$UIElems/FinalScore.text = "Terrible"
-		$UIElems/FinalScore.modulate = Color.DARK_SEA_GREEN
+	$UIElems/FinalScore.modulate = Util.TYPE_COLOR[0].lerp(Util.TYPE_COLOR[2], avg_score)
 	match gameStyle:
 		Util.STYLE.CLASSIC:
 			$UIElems/FinalScore.text += "\nScore: " + str(score) + " / " + str(ROUNDS * ROWS)

@@ -13,7 +13,7 @@ enum DIFF {
 }
 
 const TYPE_COLOR = {
-	0 : Color.CADET_BLUE,
+	0 : Color.DARK_RED,
 	1 : Color.CHOCOLATE,
-	2 : Color.DARK_ORCHID,
+	2 : Color.MEDIUM_PURPLE,
 }
