@@ -67,6 +67,11 @@ func _on_continue_pressed() -> void:
 	var next_level_resource = load("res://title.tscn")
 	var next_level = next_level_resource.instantiate()
 	root.add_child(next_level)
+	
+	# Keep persistent features
+	var persist = get_node("Persist")
+	remove_child(persist)
+	next_level.add_child(persist)
 
 
 func _on_replay_pressed() -> void:
@@ -86,6 +91,11 @@ func _on_replay_pressed() -> void:
 			next_level.BURN_TIME = 10
 		Util.DIFF.HARD:
 			next_level.BURN_TIME = 5
+	
+	# Keep persistent features
+	var persist = get_node("Persist")
+	remove_child(persist)
+	next_level.add_child(persist)
 	
 	next_level.gameStyle = style
 	next_level.difficulty = difficulty
