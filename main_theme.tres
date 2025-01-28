@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://fmwk4dgdidfw"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://fmwk4dgdidfw"]
+
+[ext_resource type="FontFile" uid="uid://bh7s42niw5qk4" path="res://TheRumIsGone-Wy1nG.ttf" id="1_010w6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gjkm"]
 border_width_left = 2
@@ -12,6 +14,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [resource]
+default_font = ExtResource("1_010w6")
 default_font_size = 45
 BoxContainer/constants/separation = 40
 Button/styles/pressed = SubResource("StyleBoxFlat_4gjkm")

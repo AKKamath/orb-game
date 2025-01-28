@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dy5dtls2d8cum"]
+[gd_scene load_steps=3 format=3 uid="uid://dy5dtls2d8cum"]
 
 [ext_resource type="Script" path="res://particle_effect.gd" id="1_ivj0p"]
+
+[sub_resource type="Gradient" id="Gradient_4r81b"]
+colors = PackedColorArray(0.153077, 0.153077, 0.153077, 1, 1, 1, 1, 1)
 
 [node name="ParticleEffect" type="Node2D"]
 z_index = 10
@@ -20,6 +23,7 @@ initial_velocity_max = 5.0
 orbit_velocity_min = -1.0
 orbit_velocity_max = 1.0
 scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_4r81b")
 
 [node name="Timer" type="Timer" parent="."]
 

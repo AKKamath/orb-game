@@ -30,9 +30,19 @@ func _ready() -> void:
 	reset()
 	pass # Replace with function body.
 
+var growing : bool = true
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	$CPUParticles2D.color = $CPUParticles2D.color.lerp(target_color, delta)
+	if growing:
+		$CPUParticles2D.scale += Vector2(delta / 3, delta / 3)
+		if $CPUParticles2D.scale.x > 1.5:
+			growing = false;
+	else:
+		$CPUParticles2D.scale -= Vector2(delta / 3, delta / 3)
+		if $CPUParticles2D.scale.x < 0.75:
+			growing = true;
+		
 	if direction == DIRS.L2R:
 		position += delta * SPEED
 		if(position.x > get_viewport().size.x):

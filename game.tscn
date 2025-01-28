@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2u3ab8aorqqg"]
+[gd_scene load_steps=13 format=3 uid="uid://b2u3ab8aorqqg"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_ye45a"]
 [ext_resource type="PackedScene" uid="uid://cefkthik5xabh" path="res://orb.tscn" id="2_icx0f"]
+[ext_resource type="Theme" uid="uid://fmwk4dgdidfw" path="res://main_theme.tres" id="3_d5b6f"]
 [ext_resource type="Script" path="res://score_indicator.gd" id="3_femau"]
 [ext_resource type="AudioStream" uid="uid://dukgljr0u3hjj" path="res://orbs_up.mp3" id="4_3rvuf"]
 [ext_resource type="AudioStream" uid="uid://dxwog4bwvp6cq" path="res://magic-charge-mana-2-186628.mp3" id="5_t6as0"]
@@ -31,33 +32,6 @@ fill_to = Vector2(0.325688, 0.527523)
 script = ExtResource("1_ye45a")
 orbObj = ExtResource("2_icx0f")
 
-[node name="ScoreIndicator" type="Label" parent="."]
-visible = false
-top_level = true
-z_index = 2
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -38.0
-offset_right = 20.0
-offset_bottom = 38.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 200
-text = "Test
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-script = ExtResource("3_femau")
-
-[node name="IndicatorTimer" type="Timer" parent="ScoreIndicator"]
-wait_time = 2.0
-
 [node name="BurnBar" type="ProgressBar" parent="."]
 modulate = Color(1, 0.505882, 0.266667, 1)
 anchors_preset = 11
@@ -80,9 +54,18 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -4707.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_d5b6f")
+
+[node name="Button" type="Button" parent="UI"]
+z_index = 11
+z_as_relative = false
+offset_right = 166.0
+offset_bottom = 84.0
+theme_override_font_sizes/font_size = 55
+text = "RESET"
 
 [node name="Score" type="Label" parent="UI"]
 layout_mode = 1
@@ -95,19 +78,42 @@ offset_bottom = 23.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 50
 
+[node name="ScoreIndicator" type="Label" parent="UI"]
+visible = false
+top_level = true
+z_index = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -202.0
+offset_top = -136.5
+offset_right = 202.0
+offset_bottom = 136.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 200
+text = "Test
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_femau")
+
+[node name="IndicatorTimer" type="Timer" parent="UI/ScoreIndicator"]
+wait_time = 2.0
+
 [node name="ScoreBar" type="ProgressBar" parent="."]
 modulate = Color(1, 0.14902, 1, 1)
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 99.0
 grow_horizontal = 2
+mouse_filter = 2
 show_percentage = false
-
-[node name="Button" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
-theme_override_font_sizes/font_size = 55
-text = "RESET"
 
 [node name="UpOrbs" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_3rvuf")
@@ -128,8 +134,8 @@ material = SubResource("CanvasItemMaterial_c56cs")
 rotation = 3.14159
 texture = SubResource("GradientTexture2D_yvewy")
 
-[connection signal="timeout" from="ScoreIndicator/IndicatorTimer" to="ScoreIndicator" method="_on_indicator_timer_timeout"]
 [connection signal="gui_input" from="BurnBar" to="." method="_on_burn_bar_gui_input"]
 [connection signal="timeout" from="BurnTimer" to="." method="_on_timer_timeout"]
 [connection signal="resized" from="UI" to="." method="_on_ui_resized"]
-[connection signal="gui_input" from="Button" to="." method="_on_button_gui_input"]
+[connection signal="gui_input" from="UI/Button" to="." method="_on_button_gui_input"]
+[connection signal="timeout" from="UI/ScoreIndicator/IndicatorTimer" to="UI/ScoreIndicator" method="_on_indicator_timer_timeout"]

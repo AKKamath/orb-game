@@ -156,8 +156,8 @@ func _ready() -> void:
 		create_new_col(i)
 	
 	# Reset UI elements
-	$Button.text = "Stop"
-	$UI.get_node("Score").text = ""
+	$UI/Button.text = "STOP"
+	$UI/Score.text = ""
 	$BurnTimer.start(BURN_TIME)
 	$BurnBar.max_value = BURN_TIME
 	$BurnBar.value = 0
@@ -171,9 +171,11 @@ func _ready() -> void:
 	$Uplight.hide()
 	$Downlight.hide()
 	
-	bg[0] = $Persist/Background.texture.gradient.get_color(0)
-	bg[1] = $Persist/Background.texture.gradient.get_color(1)
-	bg[2] = $Persist/Background.texture.gradient.get_color(2)
+	var persist = get_parent().get_node("Persist/Background")
+	
+	bg[0] = persist.texture.gradient.get_color(0)
+	bg[1] = persist.texture.gradient.get_color(1)
+	bg[2] = persist.texture.gradient.get_color(2)
 	
 	game_running = true
 	pass # Replace with function body.
@@ -264,12 +266,6 @@ func game_end():
 	next_level.setup_score(score, gameStyle, difficulty, \
 		ROWS, ROUNDS, scoredSteps)
 	root.add_child(next_level)
-	
-	# Keep persistent features
-	var persist = get_node("Persist")
-	remove_child(persist)
-	next_level.add_child(persist)
-	
 	level.call_deferred("free")
 	return
 
@@ -334,20 +330,20 @@ func _on_timer_timeout() -> void:
 		# Apply multiplier to score
 		score += (roundScore - burnedCount) * (perfectSteps + 1)
 		if roundScore == ROWS:
-			$ScoreIndicator.text = "Perfect!"
-			$ScoreIndicator.modulate = Color.PURPLE
+			$UI/ScoreIndicator.text = "Perfect!"
+			$UI/ScoreIndicator.modulate = Color.PURPLE
 		elif(roundScore > ROWS * 3.0 / 4.0):
-			$ScoreIndicator.text = "Nice"
-			$ScoreIndicator.modulate = Color.GOLD
+			$UI/ScoreIndicator.text = "Nice"
+			$UI/ScoreIndicator.modulate = Color.GOLD
 		elif(roundScore > ROWS / 2.0):
-			$ScoreIndicator.text = "Okay"
-			$ScoreIndicator.modulate = Color.ORANGE
+			$UI/ScoreIndicator.text = "Okay"
+			$UI/ScoreIndicator.modulate = Color.ORANGE
 		else:
-			$ScoreIndicator.text = "Meh"
-			$ScoreIndicator.modulate = Color.WEB_GREEN
+			$UI/ScoreIndicator.text = "Meh"
+			$UI/ScoreIndicator.modulate = Color.WEB_GREEN
 			
-		$ScoreIndicator.reset()
-		$ScoreIndicator.show()
+		$UI/ScoreIndicator.reset()
+		$UI/ScoreIndicator.show()
 		scoredSteps += 1
 		$ScoreBar.value = scoredSteps
 		#var color = Color.BLACK
@@ -360,13 +356,14 @@ func _on_timer_timeout() -> void:
 		$ParticleEffect.scale = Vector2(scoredSteps, scoredSteps) * 2
 		$ParticleEffect/CPUParticles2D.amount = 1000 * scoredSteps
 		
-		$Persist/Background.texture.gradient.set_color(0, bg[0].lerp(color, 0.25))
-		$Persist/Background.texture.gradient.set_color(2, bg[2].lerp(color, 0.25))
+		var persist = get_parent().get_node("Persist/Background")
+		persist.texture.gradient.set_color(0, bg[0].lerp(color, 0.25))
+		persist.texture.gradient.set_color(2, bg[2].lerp(color, 0.25))
 	elif burnedCount > 0:
-		$ScoreIndicator.text = "Waste!"
-		$ScoreIndicator.modulate = Color.CADET_BLUE
-		$ScoreIndicator.reset()
-		$ScoreIndicator.show()
+		$UI/ScoreIndicator.text = "Waste!"
+		$UI/ScoreIndicator.modulate = Color.CADET_BLUE
+		$UI/ScoreIndicator.reset()
+		$UI/ScoreIndicator.show()
 	steps += 1
 	create_new_col(0, true, burnedCount)
 	# Connect to newly created column
@@ -374,12 +371,12 @@ func _on_timer_timeout() -> void:
 		connect_orbs(orbDict[Vector2i(1, row)])
 	match gameStyle:
 		Util.STYLE.CLASSIC:
-			$UI.get_node("Score").text = str(score)
+			$UI/Score.text = str(score) + " / " + str(ROWS * scoredSteps)
 		Util.STYLE.PERFECT:
-			$UI.get_node("Score").text = str(scoredSteps)
+			$UI/Score.text = str(scoredSteps)
 		Util.STYLE.ENDLESS:
 			if(scoredSteps > 0):
-				$UI.get_node("Score").text = str(score / scoredSteps)
+				$UI/Score.text = str(score / scoredSteps)
 	
 	$BurnTimer.start(BURN_TIME)
 	$BurnBar.max_value = BURN_TIME

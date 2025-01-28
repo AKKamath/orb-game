@@ -39,7 +39,7 @@ func setup_score(score : int, gameStyle : Util.STYLE, gameDiff : Util.DIFF, ROWS
 	$UIElems/FinalScore.modulate = Util.TYPE_COLOR[0].lerp(Util.TYPE_COLOR[2], avg_score)
 	match gameStyle:
 		Util.STYLE.CLASSIC:
-			$UIElems/FinalScore.text += "\nScore: " + str(score) + " / " + str(ROUNDS * ROWS)
+			$UIElems/FinalScore.text += "\nSCORE: " + str(score) + " / " + str(ROUNDS * ROWS)
 		Util.STYLE.ENDLESS:
 			if scoredSteps:
 				$UIElems/FinalScore.text += "\n Avg score: " + str(score / scoredSteps) + " / " + str(ROWS)
@@ -50,7 +50,7 @@ func setup_score(score : int, gameStyle : Util.STYLE, gameDiff : Util.DIFF, ROWS
 	$UIElems/FinalScore.show()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$BurnBar.value = $BurnBar.max_value - $BurnTimer.time_left
 	$BurnBar.modulate.r8 = 255 * ($BurnBar.max_value - $BurnTimer.time_left) / $BurnBar.max_value
 	pass
@@ -67,12 +67,6 @@ func _on_continue_pressed() -> void:
 	var next_level_resource = load("res://title.tscn")
 	var next_level = next_level_resource.instantiate()
 	root.add_child(next_level)
-	
-	# Keep persistent features
-	var persist = get_node("Persist")
-	remove_child(persist)
-	next_level.add_child(persist)
-
 
 func _on_replay_pressed() -> void:
 	var root = get_parent()
@@ -91,11 +85,6 @@ func _on_replay_pressed() -> void:
 			next_level.BURN_TIME = 10
 		Util.DIFF.HARD:
 			next_level.BURN_TIME = 5
-	
-	# Keep persistent features
-	var persist = get_node("Persist")
-	remove_child(persist)
-	next_level.add_child(persist)
 	
 	next_level.gameStyle = style
 	next_level.difficulty = difficulty

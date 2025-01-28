@@ -38,6 +38,8 @@ func _ready() -> void:
 	$StyleUI/StyleOpts/ClassicButton.modulate       = Util.TYPE_COLOR[1]
 	$StyleUI/StyleOpts/PerfectionistButton.modulate = Util.TYPE_COLOR[2]
 	
+	$Title/orb.highlighted = true
+	
 	$InsBox.hide()
 	$InsPanel.hide()
 	# Setup instruction orbs
@@ -119,8 +121,8 @@ func _on_resized() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# Some small animation for effect
-	$Title/orb/MeshInstance2D/PointLight2D.rotation += delta
-	$Title/orb/MeshInstance2D/PointLight2D2.rotation += delta
+	$Title/orb/MeshInstance2D/Sprite2D.rotation += delta
+	$Title/orb/MeshInstance2D/Sprite2D2.rotation += delta
 	pass
 
 
@@ -198,10 +200,6 @@ func _on_start_button_pressed() -> void:
 	
 	next_level.gameStyle = style
 	next_level.difficulty = difficulty
-	# Keep persistent features
-	var persist = get_parent().get_node("Persist")
-	get_parent().remove_child(persist)
-	next_level.add_child(persist)
 	
 	root.add_child(next_level)
 	level.call_deferred("free")

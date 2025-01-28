@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0n1w8fw6hw0p"]
+
+[ext_resource type="AudioStream" uid="uid://cpfsl3nre6hpg" path="res://glass-wind-157910.mp3" id="1_sqt7h"]
+
+[sub_resource type="Gradient" id="Gradient_erxc8"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.522727, 1)
+colors = PackedColorArray(0.352941, 0.352941, 0.352941, 1, 0.235294, 0.235294, 0.235294, 1, 0.352941, 0.352941, 0.352941, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2og51"]
+gradient = SubResource("Gradient_erxc8")
+width = 512
+height = 512
+
+[node name="Persist" type="Node"]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_sqt7h")
+autoplay = true
+parameters/looping = true
+
+[node name="Background" type="TextureRect" parent="."]
+z_index = -20
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_2og51")
+stretch_mode = 1

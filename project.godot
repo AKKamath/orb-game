@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.3", "Mobile")
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
+[autoload]
+
+Persist="*res://persist.tscn"
+
 [display]
 
 window/size/viewport_width=7200
