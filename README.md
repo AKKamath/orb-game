@@ -10,6 +10,9 @@ Purple orbs with a '+' add one to the count, while blue orbs with '-' remove one
 If the count is negative the column moves downward and is ignored. If the count is positive, the column moves upward count is added to the running score.
 
 After 10 rounds, the game ends and the final score is shown.
+
+Available to play at: https://akkamath.github.io/web/orb_swap.html
+
 <img width="1438" alt="Screenshot 2025-01-08 at 8 01 30 PM" src="https://github.com/user-attachments/assets/9b34deb4-65d4-40f0-bf42-40edcc428948" />
 
 
